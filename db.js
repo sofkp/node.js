@@ -8,10 +8,10 @@ const db = new sqlite3.Database('./employees.db', (err) => {
         // Crear la tabla si no existe
         db.run(`CREATE TABLE IF NOT EXISTS employees (
             employee_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            last_name NVARCHAR(20) NOT NULL,
-            first_name NVARCHAR(20) NOT NULL,
-            title NVARCHAR(20),
-            address NVARCHAR(100),
+            last_name TEXT NOT NULL,
+            first_name TEXT NOT NULL,
+            title TEXT,
+            address TEXT,
             country_code INTEGER
         )`);
     }
