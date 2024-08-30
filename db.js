@@ -1,7 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('employees.db');
 
-// Definir la instrucción SQL para crear la tabla
 const createTable = `
 CREATE TABLE IF NOT EXISTS employees (
   employee_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -21,4 +20,4 @@ db.run(createTable, (err) => {
   }
 });
 
-db.close();
+module.exports = db;
