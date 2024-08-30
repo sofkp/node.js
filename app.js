@@ -51,6 +51,75 @@ app.post('/employees', (req, res) => {
     });
 });
 
+// Endpoint para actualizar un empleado por ID
+app.put('/employees/:id', (req, res) => {
+    const id = req.params.id;
+    const { last_name, first_name, title, address, country_code } = req.body;
+
+    // Verificar que al menos uno de los campos sea proporcionado
+    if (!last_name && !first_name && !title && !address && !country_code) {
+        return res.status(400).json({ "error": "At least one field is required to update" });
+    }
+
+    // Construir la instrucción SQL dinámicamente
+    let sql = `UPDATE employees SET `;
+    let params = [];
+
+    if (last_name) {
+        sql += `last_name = ?, `;
+        params.push(last_name);
+    }
+    if (first_name) {
+        sql += `first_name = ?, `;
+        params.push(first_name);
+    }
+    if (title) {
+        sql += `title = ?, `;
+        params.push(title);
+    }
+    if (address) {
+        sql += `address = ?, `;
+        params.push(address);
+    }
+    if (country_code) {
+        sql += `country_code = ?, `;
+        params.push(country_code);
+    }
+
+    // Eliminar la última coma y espacio
+    sql = sql.slice(0, -2);
+    sql += ` WHERE employee_id = ?`;
+    params.push(id);
+
+    db.run(sql, params, function(err) {
+        if (err) {
+            return res.status(400).json({ "error": err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ "error": "Employee not found" });
+        }
+        res.status(200).json({ "status": "success", "message": "Employee updated successfully" });
+    });
+});
+
+// Endpoint para eliminar un empleado por ID
+app.delete('/employees/:id', (req, res) => {
+    const id = req.params.id;
+
+    const sql = `DELETE FROM employees WHERE employee_id = ?`;
+
+    db.run(sql, [id], function(err) {
+        if (err) {
+            return res.status(400).json({ "error": err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ "error": "Employee not found" });
+        }
+        res.status(200).json({ "status": "success", "message": "Employee deleted successfully" });
+    });
+});
+
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
