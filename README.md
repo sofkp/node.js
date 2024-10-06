@@ -1,2 +1,2 @@
 # node.js
-Tarea: repositorio para la clase de Algoritmos y Estructuras de Datos
+Tarea: Repositorio para ejercicio del curso Cloud Computing
